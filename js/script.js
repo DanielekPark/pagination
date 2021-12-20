@@ -69,23 +69,44 @@ function appendPageLinks(list) {
    }); 
 }
 
-/*****EVENT LISTENER******/
+/*****EVENT LISTENERS******/
 /** when the DOM is loaded code below is executed **/
 document.addEventListener('DOMContentLoaded', () => {
-   //adds a search input and button on the top of the page; add input search functionality later
-   // const inputContainer = document.createElement('div');
-   // inputContainer.classList.add('student-search');
-   // pageHeader.appendChild(inputContainer);  
-   // const searchInput = document.createElement('input');
-   // searchInput.type = 'search';
-   // searchInput.placeholder = 'search for a student';      
-   // const searchBtn = document.createElement('button');
-   // searchBtn.textContent = 'search';
-   // inputContainer.appendChild(searchInput);
-   // inputContainer.appendChild(searchBtn);
+   const names = [...document.querySelectorAll('h3')]; 
+   const inputContainer = document.createElement('div');
+   inputContainer.classList.add('student-search');
+   pageHeader.appendChild(inputContainer);  
+   
+   const searchBar = document.createElement('input');
+   searchBar.type = 'text';
+   searchBar.placeholder = 'search for a student';      
+   const searchBtn = document.createElement('button');
+   searchBtn.textContent = 'search';
+   inputContainer.appendChild(searchBar);
+   inputContainer.appendChild(searchBtn);
    // when page is loaded the first 9 students will be shown;
-   for(let i = 9; i < studentItemsList.length; i++){
-      studentItemsList[i].style.display = "none"; 
+   function displayFirstNine() {
+      for(let i = 9; i < studentItemsList.length; i++){
+         studentItemsList[i].style.display = "none"; 
+      }      
    }
+   displayFirstNine(); 
    appendPageLinks(studentItemsList);
+
+   //EVENT LISTENER SEARCH BAR FUNCTIONALITY
+   searchBar.addEventListener('keyup', () => {
+      const div = document.querySelector('.pagination'); 
+      const li = [...div.querySelector('ul').children]; 
+      li.forEach((item) => item.firstChild.classList.remove('active'));
+      const searchVal = searchBar.value.toLowerCase(); 
+      if(searchVal){
+         names.forEach((name) => {
+            if(!name.textContent.includes(searchVal)) name.parentElement.parentElement.style.display = 'none';  
+         });          
+      }else if(!searchVal){
+         studentItemsList.forEach((student) => student.style.display = 'block'); 
+         displayFirstNine(); 
+         li[0].firstChild.classList.add('active'); 
+      } 
+   });   
 });
