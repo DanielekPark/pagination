@@ -69,27 +69,43 @@ function appendPageLinks(list) {
    }); 
 }
 
+   function displayFirstNine() {
+      for(let i = 9; i < studentItemsList.length; i++){
+         studentItemsList[i].style.display = "none"; 
+      }      
+   }
+   
 /*****EVENT LISTENERS******/
 /** when the DOM is loaded code below is executed **/
 document.addEventListener('DOMContentLoaded', () => {
    const names = [...document.querySelectorAll('h3')]; 
    const inputContainer = document.createElement('div');
+
    inputContainer.classList.add('student-search');
    pageHeader.appendChild(inputContainer);  
    
    const searchBar = document.createElement('input');
    searchBar.type = 'text';
    searchBar.placeholder = 'search for a student';      
-   const searchBtn = document.createElement('button');
-   searchBtn.textContent = 'search';
+   const clearBtn = document.createElement('button');
+   clearBtn.textContent = 'clear';
    inputContainer.appendChild(searchBar);
-   inputContainer.appendChild(searchBtn);
+   inputContainer.appendChild(clearBtn);
+
+   clearBtn.addEventListener('click', () => {
+      if(!searchBar.value) return; 
+      for(let i = 0; i < 10; i++){
+         studentItemsList[i].style.display = 'block'; 
+      }
+      displayFirstNine(); 
+      searchBar.value = ''; 
+      const div = document.querySelector('.pagination'); 
+      const btn = div.querySelector('a')
+      btn.classList.add('active'); 
+   }); 
+
    // when page is loaded the first 9 students will be shown;
-   function displayFirstNine() {
-      for(let i = 9; i < studentItemsList.length; i++){
-         studentItemsList[i].style.display = "none"; 
-      }      
-   }
+
    displayFirstNine(); 
    appendPageLinks(studentItemsList);
 
@@ -97,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
    searchBar.addEventListener('keyup', () => {
       const div = document.querySelector('.pagination'); 
       const li = [...div.querySelector('ul').children]; 
+      studentItemsList.forEach((student) => student.style.display = 'block')
       li.forEach((item) => item.firstChild.classList.remove('active'));
       const searchVal = searchBar.value.toLowerCase(); 
       if(searchVal){
