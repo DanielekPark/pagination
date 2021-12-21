@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       displayFirstNine(); 
       searchBar.value = ''; 
-      const div = document.querySelector('.pagination'); 
-      const btn = div.querySelector('a')
-      btn.classList.add('active'); 
+      const buttons = document.querySelectorAll('a'); 
+      buttons.forEach((btn) => btn.classList.remove('active'));
+      buttons[0].classList.add('active'); 
    }); 
 
    // when page is loaded the first 9 students will be shown;
